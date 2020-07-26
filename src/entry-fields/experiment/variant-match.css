@@ -1,0 +1,36 @@
+.match-row {
+  display: flex;
+  flex-direction: row;
+  margin-top: 12px;
+  align-items: center;
+}
+
+.match-label {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
+    sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  border: none;
+  max-width: 100%;
+  line-height: 1.5rem;
+  padding: 0.375rem 0.625rem;
+  font-size: 0.875rem;
+  color: #536171;
+  flex-grow: 2;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 0 32px 0 0;
+  text-align: right;
+  width: 80px;
+  line-height: 2;
+}
+
+.match-label-pill {
+  background: #e5ebed;
+  border-radius: 0.125rem;
+  text-align: center;
+  font-weight: normal;
+}
+
+.match-actions {
+  width: 48px;
+  text-align: center;
+}
