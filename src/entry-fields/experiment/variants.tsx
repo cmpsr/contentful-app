@@ -116,6 +116,22 @@ export const Variants: React.FC<IVariantsProps> = ({
   const handleDelete = (index: number) => {
     const updatedVariants = [...variants];
     updatedVariants.splice(index, 1);
+
+    // Try and fill remainding traffic
+    for (let i = 0; i < updatedVariants.length; i++) {
+      const currentValue = updatedVariants[i];
+      if (i !== index && !currentValue.lockTraffic) {
+        const { total } = getTrafficTotals(updatedVariants, index);
+        if (total === 1) {
+          break;
+        }
+        const remainder = 1 - total;
+        currentValue.traffic = between0and1AndTruncate(
+          currentValue.traffic + remainder,
+        );
+      }
+    }
+
     onChange(updatedVariants);
   };
 
@@ -133,7 +149,7 @@ export const Variants: React.FC<IVariantsProps> = ({
           index={index}
         />
       ))}
-      <VariantAdd onAdd={handleSetVariant} sdk={sdk} />
+      <VariantAdd onAdd={handleSetVariant} sdk={sdk} isFirst={(variants ?? []).length === 0} />
     </>
   );
 };

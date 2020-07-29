@@ -18,7 +18,7 @@ export const TrafficAllocationTextField: React.FC<ITrafficAllocationProps> = ({
 }) => {
   return (
     <>
-      <div>
+      <div className="f36-margin-top--l">
         <FormLabel htmlFor="allocation" required={true}>
           Traffic Allocation
         </FormLabel>

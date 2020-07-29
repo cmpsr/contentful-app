@@ -6,16 +6,17 @@ import { Button } from '@contentful/forma-36-react-components';
 export interface IVariantAddProps {
   onAdd: (data: IVariantData) => void;
   sdk: FieldExtensionSDK;
+  isFirst: boolean;
 }
 
-export const VariantAdd: React.FC<IVariantAddProps> = ({ sdk, onAdd }) => {
+export const VariantAdd: React.FC<IVariantAddProps> = ({ sdk, onAdd, isFirst }) => {
   const handleAdd = React.useCallback(() => {
     onAdd({
       name: 'My Test',
-      traffic: 0.1,
+      traffic: isFirst ? 1 : 0,
       lockTraffic: false,
     });
-  }, [onAdd]);
+  }, [isFirst, onAdd]);
 
   return (
     <Button
