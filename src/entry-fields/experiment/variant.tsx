@@ -29,6 +29,7 @@ export interface IVariantProps {
   data: IVariantData;
   sdk: FieldExtensionSDK;
   index: number;
+  wiggleRoom: number;
   onChange: (data: IVariantData, index: number) => void;
   onBalanceTraffic: (allocation: number, index: number) => void;
   onDelete: (index: number) => void;
@@ -38,6 +39,7 @@ export const Variant: React.FC<IVariantProps> = ({
   data,
   sdk,
   index,
+  wiggleRoom,
   onChange,
   onBalanceTraffic,
   onDelete,
@@ -213,6 +215,7 @@ export const Variant: React.FC<IVariantProps> = ({
         <VariantTraffic
           value={data.traffic}
           isLocked={data.lockTraffic}
+          wiggleRoom={wiggleRoom}
           onChange={handleBalanceTraffic}
           onToggleLock={handleToggleLock}
         />

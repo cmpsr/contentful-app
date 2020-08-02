@@ -13,7 +13,7 @@ export const VariantAdd: React.FC<IVariantAddProps> = ({ sdk, onAdd, isFirst }) 
   const handleAdd = React.useCallback(() => {
     onAdd({
       name: 'My Test',
-      traffic: isFirst ? 1 : 0,
+      traffic: isFirst ? 100 : 0,
       lockTraffic: false,
     });
   }, [isFirst, onAdd]);

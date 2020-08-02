@@ -7,22 +7,23 @@ import { FormLabel } from '@contentful/forma-36-react-components';
 interface ITrafficData {
   boundedTrafficVariants: IVariantData[];
   total: number;
+  offset: number;
   totalFromAdjustableTests: number; // Count of non-locked traffic, not including one changed
   adjustableTestsCount: number;
 }
 
-const between0and1AndTruncate = (value: number) =>
-  Math.round(Math.max(0, Math.min(1, value)) * 100) / 100;
+const between0and100AndTruncate = (value: number) =>
+  Math.round(Math.max(0, Math.min(100, value)));
 
 const getTrafficTotals = (
   variants: IVariantData[],
-  indexThatIsBeingChanged: number,
+  indexThatIsBeingChanged?: number,
   callback?: (totals: ITrafficData) => void,
 ): ITrafficData => {
-  const results = variants.reduce<ITrafficData>(
+  let results = variants.reduce<ITrafficData>(
     (accumulator, currentValue, i) => {
       // make sure its within range
-      const traffic = between0and1AndTruncate(currentValue.traffic || 0);
+      const traffic = between0and100AndTruncate(currentValue.traffic || 0);
       accumulator.boundedTrafficVariants[i].traffic = traffic;
       accumulator.total = accumulator.total + traffic;
       if (i !== indexThatIsBeingChanged && !currentValue.lockTraffic) {
@@ -35,10 +36,15 @@ const getTrafficTotals = (
     {
       boundedTrafficVariants: [...variants],
       total: 0,
+      offset: 0,
       totalFromAdjustableTests: 0,
       adjustableTestsCount: 0,
     },
   );
+  results = {
+    ...results,
+    offset: 100 - results.total,
+  }
   if (callback) {
     callback(results);
   }
@@ -69,7 +75,7 @@ export const Variants: React.FC<IVariantsProps> = ({
     allocation: number,
     index: number,
   ) => {
-    const newAllocation = between0and1AndTruncate(allocation);
+    const newAllocation = between0and100AndTruncate(allocation);
     let updatedVariants = [...variants];
     const oldAllocation = updatedVariants[index].traffic;
     const allocationChange = newAllocation - oldAllocation;
@@ -82,13 +88,13 @@ export const Variants: React.FC<IVariantsProps> = ({
     updatedVariants = boundedTrafficVariants;
 
     const moveRestBy = adjustableTestsCount
-      ? allocationChange / adjustableTestsCount
+      ? Math.floor(allocationChange / adjustableTestsCount)
       : 0;
 
     // Redistribute
     updatedVariants.forEach((currentValue, i) => {
       if (i !== index && !currentValue.lockTraffic) {
-        const traffic = between0and1AndTruncate(
+        const traffic = between0and100AndTruncate(
           currentValue.traffic - moveRestBy,
         );
         updatedVariants[i].traffic = traffic; // save changes
@@ -96,18 +102,23 @@ export const Variants: React.FC<IVariantsProps> = ({
     });
 
     // Try and fill remainder
-    for (let i = 0; i < updatedVariants.length; i++) {
-      const currentValue = updatedVariants[i];
-      if (i !== index && !currentValue.lockTraffic) {
-        const { total } = getTrafficTotals(updatedVariants, index);
-        if (total === 1) {
-          break;
+    if (adjustableTestsCount) {
+      const { offset: remainingOffset } = getTrafficTotals(updatedVariants, index);
+      const increment = remainingOffset < 0 ? -1 : 1;
+      let counter = 0;
+      while (remainingOffset !== 0 && counter < 100) {
+        const index = counter % adjustableTestsCount;
+        const currentValue = updatedVariants[index];
+        if ((increment === 1 && currentValue.traffic < 100) || (increment === -1 && currentValue.traffic > 0)) {
+          currentValue.traffic += increment;
         }
-        const remainder = 1 - total;
-        currentValue.traffic = between0and1AndTruncate(
-          currentValue.traffic + remainder,
-        );
+        counter++;
       }
+    }
+
+    const { offset } = getTrafficTotals(updatedVariants, index);
+    if (offset !== 0) {
+      updatedVariants[index].traffic = updatedVariants[index].traffic + offset;
     }
 
     onChange(updatedVariants);
@@ -121,19 +132,20 @@ export const Variants: React.FC<IVariantsProps> = ({
     for (let i = 0; i < updatedVariants.length; i++) {
       const currentValue = updatedVariants[i];
       if (i !== index && !currentValue.lockTraffic) {
-        const { total } = getTrafficTotals(updatedVariants, index);
-        if (total === 1) {
+        const { offset } = getTrafficTotals(updatedVariants, index);
+        if (offset === 0) {
           break;
         }
-        const remainder = 1 - total;
-        currentValue.traffic = between0and1AndTruncate(
-          currentValue.traffic + remainder,
+        currentValue.traffic = between0and100AndTruncate(
+          currentValue.traffic + offset,
         );
       }
     }
 
     onChange(updatedVariants);
   };
+
+  const { totalFromAdjustableTests: wiggleRoom } = getTrafficTotals(variants);
 
   return (
     <>
@@ -147,6 +159,7 @@ export const Variants: React.FC<IVariantsProps> = ({
           onDelete={handleDelete}
           sdk={sdk}
           index={index}
+          wiggleRoom={wiggleRoom}
         />
       ))}
       <VariantAdd onAdd={handleSetVariant} sdk={sdk} isFirst={(variants ?? []).length === 0} />

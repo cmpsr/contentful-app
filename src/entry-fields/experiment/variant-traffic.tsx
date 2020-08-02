@@ -7,11 +7,13 @@ import {
 import { Grid } from '@contentful/forma-36-react-components/dist/components/Grid';
 import { useDebouncedCallback } from 'use-debounce';
 
+
 export const TRAFFIC_FIELD_NAME = 'traffic';
 
 export interface IVariantTrafficProps {
   value: number;
   isLocked: boolean;
+  wiggleRoom: number;
   onChange: (value: number) => void;
   onToggleLock: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
@@ -19,46 +21,45 @@ export interface IVariantTrafficProps {
 export const VariantTraffic: React.FC<IVariantTrafficProps> = ({
   value,
   isLocked,
+  wiggleRoom,
   onChange,
   onToggleLock,
 }) => {
-  const stringValue = value.toString();
+  const [valueState, setValueState] = React.useState<undefined | number>();
+  const stringValue: string = valueState === undefined ? value.toString() : valueState.toString();
+  const wiggleRoomRef = React.useRef<number>(wiggleRoom);
+  wiggleRoomRef.current = wiggleRoom;
 
   const sliderRef = React.useRef<HTMLInputElement>(null);
   const textRef = React.useRef<HTMLInputElement>(null);
 
-  const [debounceChange] = useDebouncedCallback((updatedValue: string) => {
+  const [debounceChange] = useDebouncedCallback((updatedValue: number) => {
     onChange(Number(updatedValue));
-  }, 500);
+  }, 60, { maxWait: 60 });
 
   const handleChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.currentTarget.value;
-      if (sliderRef.current) {
-        sliderRef.current.value = newValue;
-      }
-      if (textRef.current) {
-        textRef.current.value = newValue;
-      }
-      debounceChange(newValue);
+      const num = Number(newValue);
+      setValueState(num <= wiggleRoomRef.current ? num : wiggleRoomRef.current);
+      debounceChange(num);
     },
     [debounceChange],
   );
 
-  React.useEffect(() => {
-    if (sliderRef.current) {
-      sliderRef.current.value = stringValue;
-    }
-    if (textRef.current) {
-      textRef.current.value = stringValue;
-    }
-  }, [stringValue]);
+  const handleMouseUp = React.useCallback(
+    () => {
+      setValueState(undefined);
+    },
+    [],
+  );
+
 
   return (
     <div className="f36-margin-top--m f36-margin-right--xl f36-padding-right--xl">
       <div>
         <FormLabel htmlFor={TRAFFIC_FIELD_NAME} required={true}>
-          Traffic
+          Traffic Percentage
         </FormLabel>
       </div>
       <Grid
@@ -73,11 +74,14 @@ export const VariantTraffic: React.FC<IVariantTrafficProps> = ({
             type="range"
             name={TRAFFIC_FIELD_NAME}
             min="0"
-            max="1"
-            step="0.01"
+            max="100"
+            step="1"
+            onMouseUp={handleMouseUp}
             onChange={handleChange}
             style={{ width: '100%' }}
             ref={sliderRef}
+            disabled={isLocked}
+            value={stringValue}
           />
         </div>
         <div style={{ gridColumnStart: 'span 3' }}>
@@ -87,12 +91,14 @@ export const VariantTraffic: React.FC<IVariantTrafficProps> = ({
             required={true}
             onChange={handleChange}
             type="number"
-            step={0.1}
+            step={1}
             min={0}
-            max={1}
+            max={100}
             width="full"
             style={{ textAlign: 'right' }}
             inputRef={textRef}
+            disabled={isLocked}
+            value={stringValue}
           />
         </div>
         <div style={{ padding: '.6rem 0 0' }}>
