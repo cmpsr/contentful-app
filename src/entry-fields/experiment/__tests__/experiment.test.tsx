@@ -17,7 +17,7 @@ describe('Experiment', () => {
     setState = jest.fn();
     (useField as jest.Mock<any>).mockReturnValue([
       {
-        allocation: 0.1,
+        allocation: 1,
       },
       setState,
     ]);
@@ -28,11 +28,11 @@ describe('Experiment', () => {
     expect(screen.getByTestId('TrafficAllocationTextField')).toBeTruthy();
     expect(setState).not.toBeCalled();
 
-    fireEvent.change(screen.getByTestId('cf-ui-text-input'), {
-      target: { value: '.2' },
+    fireEvent.change(screen.getByTestId('TrafficAllocationTextField'), {
+      target: { value: '2' },
     });
     expect(setState).toBeCalledWith({
-      allocation: 0.2,
+      allocation: 2,
     });
   });
   it('should render Variants and update', async () => {
