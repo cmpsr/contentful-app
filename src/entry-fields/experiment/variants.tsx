@@ -12,8 +12,9 @@ interface ITrafficData {
   adjustableTestsCount: number;
 }
 
-const between0and100AndTruncate = (value: number) =>
-  Math.round(Math.max(0, Math.min(100, value)));
+const between0and100AndTruncate = (value: number) => {
+  return Math.floor(Math.max(0, Math.min(100, value)));
+}
 
 const getTrafficTotals = (
   variants: IVariantData[],
@@ -87,9 +88,12 @@ export const Variants: React.FC<IVariantsProps> = ({
     );
     updatedVariants = boundedTrafficVariants;
 
-    const moveRestBy = adjustableTestsCount
-      ? Math.floor(allocationChange / adjustableTestsCount)
+    let moveRestBy = adjustableTestsCount
+      ? allocationChange >= 0 ? Math.floor(allocationChange / adjustableTestsCount) : Math.ceil(allocationChange / adjustableTestsCount)
       : 0;
+    if (moveRestBy === -0) {
+      moveRestBy = 0;
+    }
 
     // Redistribute
     updatedVariants.forEach((currentValue, i) => {
@@ -103,14 +107,17 @@ export const Variants: React.FC<IVariantsProps> = ({
 
     // Try and fill remainder
     if (adjustableTestsCount) {
-      const { offset: remainingOffset } = getTrafficTotals(updatedVariants, index);
+      let { offset: remainingOffset } = getTrafficTotals(updatedVariants, index);
       const increment = remainingOffset < 0 ? -1 : 1;
+      const moveable = updatedVariants.filter((v) => !v.lockTraffic);
+      const start = Math.floor(Math.random() * 100) % adjustableTestsCount;
       let counter = 0;
       while (remainingOffset !== 0 && counter < 100) {
-        const index = counter % adjustableTestsCount;
-        const currentValue = updatedVariants[index];
+        const index = (counter + start) % adjustableTestsCount;
+        const currentValue = moveable[index];
         if ((increment === 1 && currentValue.traffic < 100) || (increment === -1 && currentValue.traffic > 0)) {
           currentValue.traffic += increment;
+          remainingOffset -= increment;
         }
         counter++;
       }

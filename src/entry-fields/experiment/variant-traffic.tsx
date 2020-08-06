@@ -34,7 +34,7 @@ export const VariantTraffic: React.FC<IVariantTrafficProps> = ({
   const textRef = React.useRef<HTMLInputElement>(null);
 
   const [debounceChange] = useDebouncedCallback((updatedValue: number) => {
-    onChange(Number(updatedValue));
+    onChange(updatedValue);
   }, 60, { maxWait: 60 });
 
   const handleChange = React.useCallback(
