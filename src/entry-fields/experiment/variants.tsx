@@ -76,50 +76,33 @@ export const Variants: React.FC<IVariantsProps> = ({
     allocation: number,
     index: number,
   ) => {
-    const newAllocation = between0and100AndTruncate(allocation);
     let updatedVariants = [...variants];
-    const oldAllocation = updatedVariants[index].traffic;
-    const allocationChange = newAllocation - oldAllocation;
-    updatedVariants[index].traffic = newAllocation;
+    updatedVariants[index].traffic = between0and100AndTruncate(allocation);
 
-    const { adjustableTestsCount, boundedTrafficVariants } = getTrafficTotals(
+    let { adjustableTestsCount, boundedTrafficVariants, offset: remainingOffset } = getTrafficTotals(
       updatedVariants,
       index,
     );
     updatedVariants = boundedTrafficVariants;
-
-    let moveRestBy = adjustableTestsCount
-      ? allocationChange >= 0 ? Math.floor(allocationChange / adjustableTestsCount) : Math.ceil(allocationChange / adjustableTestsCount)
-      : 0;
-    if (moveRestBy === -0) {
-      moveRestBy = 0;
-    }
-
-    // Redistribute
-    updatedVariants.forEach((currentValue, i) => {
-      if (i !== index && !currentValue.lockTraffic) {
-        const traffic = between0and100AndTruncate(
-          currentValue.traffic - moveRestBy,
-        );
-        updatedVariants[i].traffic = traffic; // save changes
-      }
-    });
-
     // Try and fill remainder
     if (adjustableTestsCount) {
-      let { offset: remainingOffset } = getTrafficTotals(updatedVariants, index);
+
       const increment = remainingOffset < 0 ? -1 : 1;
-      const moveable = updatedVariants.filter((v) => !v.lockTraffic);
+      const moveable = updatedVariants.filter((v, i) => !v.lockTraffic && i !== index);
       const start = Math.floor(Math.random() * 100) % adjustableTestsCount;
       let counter = 0;
-      while (remainingOffset !== 0 && counter < 100) {
+      while (remainingOffset !== 0 || moveable.length === 0) {
         const index = (counter + start) % adjustableTestsCount;
         const currentValue = moveable[index];
         if ((increment === 1 && currentValue.traffic < 100) || (increment === -1 && currentValue.traffic > 0)) {
           currentValue.traffic += increment;
           remainingOffset -= increment;
         }
-        counter++;
+        if (currentValue.traffic >= 100 && currentValue.traffic <= 0) {
+          moveable.splice(index, 1); // Remove the full value
+        } else {
+          counter++;
+        }
       }
     }
 
