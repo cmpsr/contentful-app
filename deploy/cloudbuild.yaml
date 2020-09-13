@@ -5,7 +5,7 @@ steps:
     args:
       [
         "-c",
-        'docker build -f ./Dockerfile -t gcr.io/$PROJECT_ID/contentful-$BRANCH_NAME:$COMMIT_SHA --build-arg TEST="$$TEST" .',
+        'docker build -f ./deploy/Dockerfile -t gcr.io/$PROJECT_ID/contentful-$BRANCH_NAME:$COMMIT_SHA --build-arg TEST="$$TEST" .',
       ]
     secretEnv: ["TEST"]
   # push the container image to Container Registry
