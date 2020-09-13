@@ -37,7 +37,7 @@ EXPOSE 8080
 # Copy the nginx configuration file. This sets up the behavior of nginx, most
 # importantly, it ensure nginx listens on port 8080. Google App Engine expects
 # the runtime to respond to HTTP requests at port 8080.
-COPY ./packages/components/deploy/nginx.conf /etc/nginx/nginx.conf
+COPY ./deploy/nginx.conf /etc/nginx/nginx.conf
 
 # Finally, all static assets.
 COPY --from=0 /usr/src/build/ /usr/share/nginx/www/
