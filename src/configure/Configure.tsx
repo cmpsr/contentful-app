@@ -1,22 +1,22 @@
-import React from 'react';
+import React from "react";
 import {
   Heading,
   Paragraph,
   Form,
   Card,
   Workbench,
-} from '@contentful/forma-36-react-components';
-import { ContentType, AppExtensionSDK } from 'contentful-ui-extensions-sdk';
-import { EnhancedContentType } from './components';
-import config from '../config';
+} from "@contentful/forma-36-react-components";
+import { ContentType, AppExtensionSDK } from "contentful-ui-extensions-sdk";
+import { EnhancedContentType } from "./components";
+import config from "../config";
 
 export const Configure: React.FC<{ sdk: AppExtensionSDK }> = ({ sdk }) => {
   const [parameters, setParameters] = React.useState<{ [attr: string]: any }>(
-    {},
+    {}
   );
 
   const [contentTypes, setContentTypes] = React.useState<Array<ContentType>>(
-    [],
+    []
   );
 
   // const createContainer = React.useCallback(async (id: ContainerIds) => {
@@ -26,12 +26,20 @@ export const Configure: React.FC<{ sdk: AppExtensionSDK }> = ({ sdk }) => {
 
   const onConfigure = React.useRef<any>();
   onConfigure.current = React.useCallback(async () => {
-    // const { items: contentTypes } = await sdk.space.getContentTypes();
-    // const contentTypeIds = contentTypes.map(ct => ct.sys.id);
+    const { items: contentTypes } = await sdk.space.getContentTypes();
+    const contentTypeIds = (contentTypes as ContentType[]).map(
+      (ct) => ct.sys.id
+    );
 
-    const targetState: any = { EditorInterface: {} };
+    const targetState: any = {
+      EditorInterface: contentTypeIds.reduce((acc, id) => {
+        return { ...acc, [id]: { sidebar: { position: 0 } } };
+      }, {}),
+    };
+
     if (parameters.heroContentType && parameters.heroContentTypeField1) {
       targetState.EditorInterface[parameters.heroContentType] = {
+        sidebar: { position: 0 },
         controls: [
           {
             fieldId: parameters.heroContentTypeField1,
@@ -44,7 +52,7 @@ export const Configure: React.FC<{ sdk: AppExtensionSDK }> = ({ sdk }) => {
       parameters,
       targetState,
     };
-  }, [parameters]);
+  }, [parameters, sdk.space]);
 
   React.useEffect(() => {
     sdk.app.onConfigure(() => onConfigure.current());
@@ -59,7 +67,7 @@ export const Configure: React.FC<{ sdk: AppExtensionSDK }> = ({ sdk }) => {
   }, [sdk]);
 
   const handleSetParameter = React.useCallback((key: string, value: Object) => {
-    setParameters(params => {
+    setParameters((params) => {
       return {
         ...params,
         [key]: value,
@@ -84,7 +92,7 @@ export const Configure: React.FC<{ sdk: AppExtensionSDK }> = ({ sdk }) => {
               nulla pariatur
             </Paragraph>
           </Card>
-          {config.enhancedContentTypes.map(enhancedContentType => (
+          {config.enhancedContentTypes.map((enhancedContentType) => (
             <EnhancedContentType
               key={enhancedContentType.key}
               enhancedContentType={enhancedContentType}

@@ -1,1 +1,1 @@
-export * from './EnhancedContentType';
+export * from "./EnhancedContentType";

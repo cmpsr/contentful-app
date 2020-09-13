@@ -1,11 +1,11 @@
-import { FieldExtensionSDK } from 'contentful-ui-extensions-sdk';
-import React from 'react';
+import { FieldExtensionSDK } from "contentful-ui-extensions-sdk";
+import React from "react";
 
 export const useField = <T = string>(
-  sdk: FieldExtensionSDK,
+  sdk: FieldExtensionSDK
 ): [T, (val: T) => void] => {
   const [value, setValue] = React.useState<T>(
-    (sdk.field.getValue() || {}) as T,
+    (sdk.field.getValue() || {}) as T
   );
 
   const handleChange = React.useCallback(
@@ -17,7 +17,7 @@ export const useField = <T = string>(
         sdk.field.removeValue();
       }
     },
-    [sdk.field],
+    [sdk.field]
   );
 
   React.useEffect(() => {

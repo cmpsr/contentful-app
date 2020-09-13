@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 import {
   Select,
   Option,
   HelpText,
   FormLabel,
-} from '@contentful/forma-36-react-components';
-import { ContentTypeField } from 'contentful-ui-extensions-sdk';
-import { IEntryField } from '../../config';
+} from "@contentful/forma-36-react-components";
+import { ContentTypeField } from "contentful-ui-extensions-sdk";
+import { IEntryField } from "../../config";
 
 export const EntryFieldSelect: React.FC<{
   entryField: IEntryField;
@@ -16,7 +16,7 @@ export const EntryFieldSelect: React.FC<{
 }> = ({ contentTypeFields, value, entryField, onChange }) => {
   const matchingContentTypeFields = React.useMemo(() => {
     console.log(contentTypeFields);
-    return contentTypeFields.filter(f => f.type === entryField.type);
+    return contentTypeFields.filter((f) => f.type === entryField.type);
   }, [contentTypeFields, entryField]);
 
   return (
