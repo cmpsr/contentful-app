@@ -1,29 +1,33 @@
 steps:
-# build the container image
-- name: 'gcr.io/cloud-builders/docker'
-  entrypoint: bash
-  args: ['-c', 'docker build -f ./apps/contentful-app/deploy/Dockerfile -t gcr.io/$PROJECT_ID/contentful-$BRANCH_NAME:$COMMIT_SHA --build-arg TEST="$$TEST" .']
-  secretEnv: ['TEST']
-# push the container image to Container Registry
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/contentful-$BRANCH_NAME:$COMMIT_SHA']
-# Deploy container image to Cloud Run
-- name: 'gcr.io/cloud-builders/gcloud'
-  args:
-  - 'run'
-  - 'deploy'
-  - 'contentful-$BRANCH_NAME'
-  - '--image'
-  - 'gcr.io/$PROJECT_ID/contentful-$BRANCH_NAME:$COMMIT_SHA'
-  - '--region'
-  - 'us-central1'
-  - '--platform'
-  - 'managed'
-  - '--allow-unauthenticated'
+  # build the container image
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: bash
+    args:
+      [
+        "-c",
+        'docker build -f ./Dockerfile -t gcr.io/$PROJECT_ID/contentful-$BRANCH_NAME:$COMMIT_SHA --build-arg TEST="$$TEST" .',
+      ]
+    secretEnv: ["TEST"]
+  # push the container image to Container Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/contentful-$BRANCH_NAME:$COMMIT_SHA"]
+  # Deploy container image to Cloud Run
+  - name: "gcr.io/cloud-builders/gcloud"
+    args:
+      - "run"
+      - "deploy"
+      - "contentful-$BRANCH_NAME"
+      - "--image"
+      - "gcr.io/$PROJECT_ID/contentful-$BRANCH_NAME:$COMMIT_SHA"
+      - "--region"
+      - "us-central1"
+      - "--platform"
+      - "managed"
+      - "--allow-unauthenticated"
 images:
-- 'gcr.io/$PROJECT_ID/contentful-$BRANCH_NAME:$COMMIT_SHA'
+  - "gcr.io/$PROJECT_ID/contentful-$BRANCH_NAME:$COMMIT_SHA"
 secrets:
-- kmsKeyName: projects/ace-vial-240422/locations/global/keyRings/composer-production/cryptoKeys/default
-  secretEnv:
-    TEST: CiQApCdL66Ilw9nE+4b2M8AIGzTF5DDb0UZDBlzda2JPXL1JEG0SNQAuxHBFU2yJLlAif9EU1NYfKBsiVzSb9G/oNKuWkRdN9de8W1FZ3T53ft+LR9GBKuGbAWpl
+  - kmsKeyName: projects/ace-vial-240422/locations/global/keyRings/composer-production/cryptoKeys/default
+    secretEnv:
+      TEST: CiQApCdL66Ilw9nE+4b2M8AIGzTF5DDb0UZDBlzda2JPXL1JEG0SNQAuxHBFU2yJLlAif9EU1NYfKBsiVzSb9G/oNKuWkRdN9de8W1FZ3T53ft+LR9GBKuGbAWpl
 timeout: 750s

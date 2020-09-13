@@ -26,7 +26,7 @@ ENV SKIP_PREFLIGHT_CHECK=true
 # Install production dependencies.
 RUN yarn install
 
-RUN yarn run build:contentful-app
+RUN yarn run build
 
 # The standard nginx container just runs nginx. The configuration file added
 # below will be used by nginx.
@@ -40,5 +40,5 @@ EXPOSE 8080
 COPY ./packages/components/deploy/nginx.conf /etc/nginx/nginx.conf
 
 # Finally, all static assets.
-COPY --from=0 /usr/src/app/apps/contentful-app/build/ /usr/share/nginx/www/
+COPY --from=0 /usr/src/build/ /usr/share/nginx/www/
 RUN chmod -R a+r /usr/share/nginx/www
