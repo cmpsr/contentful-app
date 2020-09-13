@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 import {
   Select,
   Option,
   FormLabel,
   Note,
-} from '@contentful/forma-36-react-components';
-import { ContentType } from 'contentful-ui-extensions-sdk';
+} from "@contentful/forma-36-react-components";
+import { ContentType } from "contentful-ui-extensions-sdk";
 
 export const ContentTypeSelect: React.FC<{
   id: string;

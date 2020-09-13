@@ -1,6 +1,6 @@
-import React from 'react';
-import Downshift from 'downshift';
-import styled, { css } from 'styled-components';
+import React from "react";
+import Downshift from "downshift";
+import styled, { css } from "styled-components";
 
 type OptionType = {
   value: string;
@@ -28,7 +28,7 @@ const List = styled.ul<{ isOpen: true }>`
   &:focus {
     outline: none;
   }
-  ${props =>
+  ${(props) =>
     props.isOpen &&
     css`
       border: 1px solid rgba(0, 0, 0, 0.15);
@@ -83,8 +83,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
 }) => {
   return (
     <Downshift
-      onChange={selectedItem =>
-        onChange(selectedItem ? selectedItem.value : '')
+      onChange={(selectedItem) =>
+        onChange(selectedItem ? selectedItem.value : "")
       }
     >
       {({
@@ -97,7 +97,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
       }) => {
         //console.log(valueSelected, selectedItem);
         if (valueSelected && !selectedItem) {
-          selectedItem = items.find(item => item.value === valueSelected);
+          selectedItem = items.find((item) => item.value === valueSelected);
         }
 
         return (
@@ -109,7 +109,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                   {selectedItem.value}
                 </ItemSelected>
               )) ||
-                'Select an item'}
+                "Select an item"}
               <svg
                 height="20"
                 width="20"

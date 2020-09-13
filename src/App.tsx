@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 import {
   locations,
   KnownSDK,
   AppExtensionSDK,
   FieldExtensionSDK,
   SidebarExtensionSDK,
-} from 'contentful-ui-extensions-sdk';
-import { Configure } from './configure';
-import { Sidebar } from './sidebar';
-import { IEnhancedContentTypeParam } from './configure/components';
-import config from './config';
+} from "contentful-ui-extensions-sdk";
+import { Configure } from "./configure";
+import { Sidebar } from "./sidebar";
+import { IEnhancedContentTypeParam } from "./configure/components";
+import config from "./config";
 
 const App: React.FC<{ sdk: KnownSDK }> = ({ sdk }) => {
   if (sdk.location.is(locations.LOCATION_APP_CONFIG)) {
@@ -27,7 +27,7 @@ const App: React.FC<{ sdk: KnownSDK }> = ({ sdk }) => {
       const entryFieldConfig = enhancedContentType.entryFields.find(
         (entryField) => {
           return fieldSdk.field.id === param.entryFields[entryField.key];
-        },
+        }
       );
       if (entryFieldConfig) {
         const Component = entryFieldConfig.Component;

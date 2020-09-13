@@ -1,14 +1,14 @@
-import React from 'react';
-import { IEnhancedContentType } from '../../config';
+import React from "react";
+import { IEnhancedContentType } from "../../config";
 import {
   Card,
   Heading,
   Paragraph,
   FieldGroup,
-} from '@contentful/forma-36-react-components';
-import { ContentType } from 'contentful-ui-extensions-sdk';
-import { ContentTypeSelect } from './ContentTypeSelect';
-import { EntryFieldSelect } from './EntryFieldSelect';
+} from "@contentful/forma-36-react-components";
+import { ContentType } from "contentful-ui-extensions-sdk";
+import { ContentTypeSelect } from "./ContentTypeSelect";
+import { EntryFieldSelect } from "./EntryFieldSelect";
 
 export interface IEnhancedContentTypeParam {
   contentType: string;
@@ -23,15 +23,15 @@ export const EnhancedContentType: React.FC<{
 }> = ({
   contentTypes,
   enhancedContentType,
-  param = { contentType: '', entryFields: {} },
+  param = { contentType: "", entryFields: {} },
   onChange,
 }) => {
   const handleSetField = React.useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const attr = e.currentTarget.getAttribute('data-parameter');
+      const attr = e.currentTarget.getAttribute("data-parameter");
       const value = e.currentTarget.value;
       if (!attr) {
-        throw new Error('No attribute found');
+        throw new Error("No attribute found");
       }
 
       onChange(enhancedContentType.key, {
@@ -42,7 +42,7 @@ export const EnhancedContentType: React.FC<{
         },
       });
     },
-    [onChange, enhancedContentType.key, param],
+    [onChange, enhancedContentType.key, param]
   );
 
   const handleSetContentType = React.useCallback(
@@ -54,12 +54,12 @@ export const EnhancedContentType: React.FC<{
         contentType: value,
       });
     },
-    [onChange, enhancedContentType.key, param],
+    [onChange, enhancedContentType.key, param]
   );
 
   const contentTypeFields = React.useMemo(() => {
     const contentType = contentTypes.find(
-      ({ sys }) => sys.id === param.contentType,
+      ({ sys }) => sys.id === param.contentType
     );
     if (!contentType) {
       return [];
@@ -69,12 +69,12 @@ export const EnhancedContentType: React.FC<{
 
   let entryFields;
   if (contentTypeFields.length) {
-    entryFields = enhancedContentType.entryFields.map(entryField => {
+    entryFields = enhancedContentType.entryFields.map((entryField) => {
       return (
         <EntryFieldSelect
           key={entryField.key}
           entryField={entryField}
-          value={param?.entryFields?.[entryField.key] ?? ''}
+          value={param?.entryFields?.[entryField.key] ?? ""}
           contentTypeFields={contentTypeFields}
           onChange={handleSetField}
         />
@@ -94,7 +94,7 @@ export const EnhancedContentType: React.FC<{
         <ContentTypeSelect
           id={`${enhancedContentType.key}.contentType`}
           onChange={handleSetContentType}
-          value={param.contentType || ''}
+          value={param.contentType || ""}
           contentTypes={contentTypes}
         />
         {entryFields}

@@ -1,8 +1,6 @@
-import React from 'react';
-import {
-  Button
-} from '@contentful/forma-36-react-components';
-import { SidebarExtensionSDK } from 'contentful-ui-extensions-sdk';
+import React from "react";
+import { Button } from "@contentful/forma-36-react-components";
+import { SidebarExtensionSDK } from "contentful-ui-extensions-sdk";
 
 const DEFAULT_LOCAL = "en-US";
 type Entry = {
@@ -13,39 +11,54 @@ type Entry = {
           id: string;
           linkType: string;
           type: string;
-        }
-      }
-    }
-  },
+        };
+      };
+    };
+  };
   sys: {
-    id: string,
+    id: string;
     contentType: {
       sys: {
         id: string;
-      }
-    }
-  },
+      };
+    };
+  };
 };
 
-export const deepClone = async (sdk: SidebarExtensionSDK, sysId: string, options: { appendText: string }): Promise<Entry> => {
+const APPEND_TEXT_SEPARATOR = ": ";
+
+export const deepClone = async (
+  sdk: SidebarExtensionSDK,
+  sysId: string,
+  options: { appendText: string }
+): Promise<Entry> => {
   const entryToClone = await sdk.space.getEntry<Entry>(sysId);
-  const fields = {...entryToClone.fields};
+  const fields = { ...entryToClone.fields };
   const keys = Object.keys(fields);
   for (const fieldId of keys) {
     const field = fields[fieldId];
     if (field?.[DEFAULT_LOCAL]?.sys?.type === "Link") {
-      if (field[DEFAULT_LOCAL].sys.linkType === "Entry" && field[DEFAULT_LOCAL].sys.id) {
-        const clonedLinkEntry = await deepClone(sdk, field[DEFAULT_LOCAL].sys.id, options);
+      if (
+        field[DEFAULT_LOCAL].sys.linkType === "Entry" &&
+        field[DEFAULT_LOCAL].sys.id
+      ) {
+        const clonedLinkEntry = await deepClone(
+          sdk,
+          field[DEFAULT_LOCAL].sys.id,
+          options
+        );
         field[DEFAULT_LOCAL].sys.id = clonedLinkEntry.sys.id;
       }
     } else if (fieldId === "id") {
-      field[DEFAULT_LOCAL] = (field[DEFAULT_LOCAL] + " " + options.appendText) as any;
+      field[DEFAULT_LOCAL] = (field[DEFAULT_LOCAL] +
+        APPEND_TEXT_SEPARATOR +
+        options.appendText) as any;
     }
   }
   return await sdk.space.createEntry(entryToClone.sys.contentType.sys.id, {
     fields,
   });
-}
+};
 
 export const DeepClone: React.FC<{ sdk: SidebarExtensionSDK }> = ({ sdk }) => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -71,7 +84,6 @@ export const DeepClone: React.FC<{ sdk: SidebarExtensionSDK }> = ({ sdk }) => {
         setIsLoading(false);
       });
     setIsLoading(true);
-
   }, [sdk]);
   return (
     <Button
