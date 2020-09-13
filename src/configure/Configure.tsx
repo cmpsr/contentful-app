@@ -26,12 +26,16 @@ export const Configure: React.FC<{ sdk: AppExtensionSDK }> = ({ sdk }) => {
 
   const onConfigure = React.useRef<any>();
   onConfigure.current = React.useCallback(async () => {
-    // const { items: contentTypes } = await sdk.space.getContentTypes();
-    // const contentTypeIds = contentTypes.map(ct => ct.sys.id);
+    const { items: contentTypes } = await sdk.space.getContentTypes();
+    const contentTypeIds = (contentTypes as ContentType[]).map(ct => ct.sys.id);
 
-    const targetState: any = { EditorInterface: {} };
+    const targetState: any = { EditorInterface: contentTypeIds.reduce((acc, id) => {
+      return { ...acc, [id]: { sidebar: { position: 0 } } };
+    }, {})};
+
     if (parameters.heroContentType && parameters.heroContentTypeField1) {
       targetState.EditorInterface[parameters.heroContentType] = {
+        sidebar: { position: 0 },
         controls: [
           {
             fieldId: parameters.heroContentTypeField1,
@@ -44,7 +48,7 @@ export const Configure: React.FC<{ sdk: AppExtensionSDK }> = ({ sdk }) => {
       parameters,
       targetState,
     };
-  }, [parameters]);
+  }, [parameters, sdk.space]);
 
   React.useEffect(() => {
     sdk.app.onConfigure(() => onConfigure.current());

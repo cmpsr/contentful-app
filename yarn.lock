@@ -1120,17 +1120,17 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@contentful/forma-36-fcss@0.0.36":
-  version "0.0.36"
-  resolved "https://registry.yarnpkg.com/@contentful/forma-36-fcss/-/forma-36-fcss-0.0.36.tgz#af33398b3fad86a8acf8f9020f9279160045fb02"
-  integrity sha512-ufhgGOo1iBC/gBhabHwBRxqQJSmEbIncZohpzfTfLouqF2Y/F0yjBDdi+H+h9Wh8aakyvWzzA18nYDkIUrXeIA==
+"@contentful/forma-36-fcss@0.2.7":
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/@contentful/forma-36-fcss/-/forma-36-fcss-0.2.7.tgz#2d2067d9163ff34e8ea551aa9fa2de7ed24abfd3"
+  integrity sha512-ni88X2ZYyNglGnrh8XDb8AxM2Km8yf5mvHFzVF4k4dusLBSbcjd1AJcXXnN4lisHwHGxGeroqZNosgYdxI/Sng==
   dependencies:
-    "@contentful/forma-36-tokens" "^0.5.3"
+    "@contentful/forma-36-tokens" "^0.8.0"
 
-"@contentful/forma-36-react-components@^3.38.0":
-  version "3.42.2"
-  resolved "https://registry.yarnpkg.com/@contentful/forma-36-react-components/-/forma-36-react-components-3.42.2.tgz#d3021e3bcb83954d42bdddc1f1c168472344c277"
-  integrity sha512-9h9SVIEJXjac0RoMCMQiovysRpyp1yTZbUtTAcKHgGAtEDwjwJEt3vXrDnMREemrdKbITcEV0PTWzx/A/fC3yw==
+"@contentful/forma-36-react-components@^3.51.3":
+  version "3.51.3"
+  resolved "https://registry.yarnpkg.com/@contentful/forma-36-react-components/-/forma-36-react-components-3.51.3.tgz#fa59615275f614202cb56c2c61e934dd60cc84aa"
+  integrity sha512-+SmWu1Tsibx0XnhB227imyCJ9Q2JgFEGm10LJDazJhPYmaVs+lRRu6G3gesg/gtkcF3mk8aAJybGfC0FMww1CQ==
   dependencies:
     "@babel/runtime" "^7.3.4"
     classnames "^2.2.6"
@@ -1140,10 +1140,10 @@
     react-transition-group "^2.4.0"
     truncate "^2.0.1"
 
-"@contentful/forma-36-tokens@^0.5.3":
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/@contentful/forma-36-tokens/-/forma-36-tokens-0.5.3.tgz#127bc3d5c3bc14935e364d869888c95844b83940"
-  integrity sha512-cFNVjX/a4Sk2rTTryupgCb7u0IcNQlH7r6ztaxLEUHg56XD4KIUAFqgf+nd9ndeSilYGosm7NjXCTE4Sep0fVw==
+"@contentful/forma-36-tokens@^0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@contentful/forma-36-tokens/-/forma-36-tokens-0.8.0.tgz#0c8ff7435bd771a2bd3422d68d1e46f742421c0f"
+  integrity sha512-+/DxXhXZ7Tb0sdN1s2KoDD71ffw0WENeGizLtLH/GZC/hAv7+jFtUzaWC6Ty7HGDZD0AryTBBq4PiCUwlS89PA==
 
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"
@@ -1555,6 +1555,11 @@
   integrity sha512-i+zS7t6/s9cdQvbqKDARrcbrPvtJGlbYsMkazo03nTAK3RX9FNrLllXys22uiTGJapPOTZTQ35nHh4ISph4SLQ==
   dependencies:
     "@babel/types" "^7.3.0"
+
+"@types/clone-deep@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@types/clone-deep/-/clone-deep-4.0.1.tgz#7c488443ab9f571cd343d774551b78e9264ea990"
+  integrity sha512-bdkCSkyVHsgl3Goe1y16T9k6JuQx7SiDREkq728QjKmTZkGJZuS8R3gGcnGzVuGBP0mssKrzM/GlMOQxtip9cg==
 
 "@types/color-name@^1.1.1":
   version "1.1.1"
@@ -3252,10 +3257,10 @@ content-type@~1.0.4:
   resolved "https://registry.yarnpkg.com/content-type/-/content-type-1.0.4.tgz#e138cc75e040c727b1966fe5e5f8c9aee256fe3b"
   integrity sha512-hIP3EEPs8tB9AT1L+NUqtwOAps4mk2Zob89MWXMHjHWg9milF/j4osnnQLXBCBFBk/tvIG/tUc9mOUJiPBhPXA==
 
-contentful-ui-extensions-sdk@^3.11.2:
-  version "3.16.1"
-  resolved "https://registry.yarnpkg.com/contentful-ui-extensions-sdk/-/contentful-ui-extensions-sdk-3.16.1.tgz#d3a9d2d3d91d9acff6b6c7adda88655a2e75c132"
-  integrity sha512-DrDCPKET9IdExJjGT1t44lfxnS+3mtcaz7edT8kuESEpddIy88BqEhmlJ41o0aj6KMontjdlf166MJ3va1qaKg==
+contentful-ui-extensions-sdk@^3.23.2:
+  version "3.23.2"
+  resolved "https://registry.yarnpkg.com/contentful-ui-extensions-sdk/-/contentful-ui-extensions-sdk-3.23.2.tgz#a5f71003a1aaa07c11fc93c4327b0a9be0b3180a"
+  integrity sha512-9ZDi6L1I55I/fWKBo+za9KjPGlknu0SY+7TDqlZmyNEpBOd5HdEwsc0IOgr8tjhCAKSp3zPmU268w3C/c/EypQ==
   dependencies:
     es6-promise "^4.2.8"
 
