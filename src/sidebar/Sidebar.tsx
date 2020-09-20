@@ -1,8 +1,8 @@
 import React from "react";
 import { SidebarExtensionSDK } from "contentful-ui-extensions-sdk";
-import { DeepClone } from "./DeepClone";
+import { DeepCloneSidebar } from "./deep-clone-sidebar";
 
-const COMPONENTS = [DeepClone];
+const COMPONENTS = [DeepCloneSidebar];
 
 export const Sidebar: React.FC<{ sdk: SidebarExtensionSDK }> = ({ sdk }) => {
   return (

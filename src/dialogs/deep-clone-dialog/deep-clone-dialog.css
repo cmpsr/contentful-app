@@ -1,0 +1,17 @@
+.reference-tree {
+  padding: 0;
+  height: 100%;
+}
+
+.reference-tree li {
+  padding: 0.25rem 0;
+}
+
+.reference-card {
+  display: flex;
+  padding: 0.25rem 0.5rem;
+}
+
+.dialog-actions {
+  text-align: right;
+}
