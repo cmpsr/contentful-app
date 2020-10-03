@@ -2,6 +2,7 @@ import { Snapshot } from "recoil";
 import { DialogExtensionSDK } from "contentful-ui-extensions-sdk";
 import { Entry, DEFAULT_LOCALE, ITree, Cache } from "./types";
 import { copyState, createCopyStateKey } from "./copy-state";
+import cloneDeep from "lodash.clonedeep";
 
 const APPEND_TEXT_SEPARATOR = ": ";
 
@@ -17,11 +18,11 @@ export const deepClone = async (
     throw new Error(`Unfetched entry: ${sysId}`);
   }
 
-  const fields = { ...entryToClone.fields };
+  const fields = cloneDeep(entryToClone.fields);
   const keys = Object.keys(fields);
   const ids: string[] = []; // We need to match which one is checked since they can be not unique
   for (const fieldId of keys) {
-    const field = { ...fields[fieldId] };
+    const field = fields[fieldId];
     const locale = field[DEFAULT_LOCALE];
     if (Array.isArray(locale)) {
       for (const listItemIndex in locale) {
@@ -77,7 +78,6 @@ export const deepClone = async (
         APPEND_TEXT_SEPARATOR +
         options.appendText) as any;
     }
-    fields[fieldId] = field;
   }
   return await sdk.space.createEntry(entryToClone.sys.contentType.sys.id, {
     fields,
