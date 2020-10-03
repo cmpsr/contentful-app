@@ -5,13 +5,19 @@ import {
   AppExtensionSDK,
   FieldExtensionSDK,
   SidebarExtensionSDK,
+  DialogExtensionSDK,
 } from "contentful-ui-extensions-sdk";
 import { Configure } from "./configure";
 import { Sidebar } from "./sidebar";
 import { IEnhancedContentTypeParam } from "./configure/components";
 import config from "./config";
+import { dialogDictionary } from "./dialogs";
 
 const App: React.FC<{ sdk: KnownSDK }> = ({ sdk }) => {
+  React.useEffect(() => {
+    (sdk as FieldExtensionSDK)?.window?.startAutoResizer();
+  }, [sdk]);
+
   if (sdk.location.is(locations.LOCATION_APP_CONFIG)) {
     return <Configure sdk={sdk as AppExtensionSDK} />;
   } else if (sdk.location.is(locations.LOCATION_ENTRY_FIELD)) {
@@ -37,6 +43,20 @@ const App: React.FC<{ sdk: KnownSDK }> = ({ sdk }) => {
   } else if (sdk.location.is(locations.LOCATION_ENTRY_SIDEBAR)) {
     const sidebarSdk = sdk as SidebarExtensionSDK;
     return <Sidebar sdk={sidebarSdk} />;
+  } else if (sdk.location.is(locations.LOCATION_DIALOG)) {
+    const dialogSdk = sdk as DialogExtensionSDK;
+    const {
+      dialogId,
+      ...dialogProps
+    }: {
+      dialog: string;
+      [propName: string]: any;
+    } = (dialogSdk.parameters?.invocation ?? {}) as any;
+
+    if (dialogId && dialogDictionary[dialogId]) {
+      const Dialog = dialogDictionary[dialogId];
+      return <Dialog sdk={dialogSdk} {...dialogProps} />;
+    }
   }
   return <div>404</div>;
 };
