@@ -1,11 +1,7 @@
 import { atomFamily } from "recoil";
 
-export const createCopyStateKey = (
-  depth: number,
-  index: number,
-  sysId: string
-) => {
-  return `${depth}-${index}-${sysId}`;
+export const createCopyStateKey = (path: number[], sysId: string) => {
+  return `${path.join("-")}-${sysId}`;
 };
 
 export const copyState = atomFamily({

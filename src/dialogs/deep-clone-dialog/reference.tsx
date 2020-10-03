@@ -13,11 +13,10 @@ import { DEFAULT_LOCALE, ITree } from "./types";
 const Reference: React.FC<{
   tree: ITree;
   disabled: boolean;
-  depth: number;
-  index: number;
-}> = ({ tree, disabled, depth, index }) => {
+  path?: number[];
+}> = ({ tree, disabled, path = [] }) => {
   const [checked, setChecked] = useRecoilState(
-    copyState(createCopyStateKey(depth, index, tree.entry.sys.id))
+    copyState(createCopyStateKey(path, tree.entry.sys.id))
   );
   return (
     <ListItem className="list-style-none">
@@ -43,8 +42,7 @@ const Reference: React.FC<{
               key={i}
               tree={child}
               disabled={disabled || !checked}
-              depth={depth + 1}
-              index={i}
+              path={[...path, i]}
             />
           ))}
         </List>

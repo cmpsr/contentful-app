@@ -10,7 +10,7 @@ export const deepClone = async (
   cache: Cache,
   sysId: string,
   options: { appendText: string; snapshot: Snapshot },
-  depth = 0
+  path: number[] = []
 ): Promise<Entry> => {
   const entryToClone: Entry = cache[sysId];
   if (!entryToClone) {
@@ -21,18 +21,19 @@ export const deepClone = async (
   const keys = Object.keys(fields);
   const ids: string[] = []; // We need to match which one is checked since they can be not unique
   for (const fieldId of keys) {
-    const field = fields[fieldId];
+    const field = { ...fields[fieldId] };
     const locale = field[DEFAULT_LOCALE];
     if (Array.isArray(locale)) {
       for (const listItemIndex in locale) {
         const listItem = locale[listItemIndex];
         if (listItem?.sys?.type === "Link") {
           const id = listItem.sys.id;
+          const newPath = [...path, ids.length];
           if (listItem.sys.linkType === "Entry" && id) {
             if (
               options.snapshot.getLoadable(
                 // check if its checked
-                copyState(createCopyStateKey(depth, ids.length, id))
+                copyState(createCopyStateKey(newPath, id))
               ).contents
             ) {
               const clonedLinkEntry = await deepClone(
@@ -40,7 +41,7 @@ export const deepClone = async (
                 cache,
                 id,
                 options,
-                depth + 1
+                newPath
               );
               locale[listItemIndex].sys.id = clonedLinkEntry.sys.id;
               cache[clonedLinkEntry.sys.id] = clonedLinkEntry;
@@ -52,10 +53,11 @@ export const deepClone = async (
     } else if (locale?.sys?.type === "Link") {
       const id = locale.sys.id;
       if (locale.sys.linkType === "Entry" && id) {
+        const newPath = [...path, ids.length];
         if (
           options.snapshot.getLoadable(
             // check if its checked
-            copyState(createCopyStateKey(depth, ids.length, id))
+            copyState(createCopyStateKey(newPath, id))
           ).contents
         ) {
           const clonedLinkEntry = await deepClone(
@@ -63,7 +65,7 @@ export const deepClone = async (
             cache,
             id,
             options,
-            depth + 1
+            newPath
           );
           locale.sys.id = clonedLinkEntry.sys.id;
           cache[clonedLinkEntry.sys.id] = clonedLinkEntry;
@@ -75,6 +77,7 @@ export const deepClone = async (
         APPEND_TEXT_SEPARATOR +
         options.appendText) as any;
     }
+    fields[fieldId] = field;
   }
   return await sdk.space.createEntry(entryToClone.sys.contentType.sys.id, {
     fields,
