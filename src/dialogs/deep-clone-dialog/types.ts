@@ -1,16 +1,24 @@
-export const DEFAULT_LOCAL = "en-US";
+export const DEFAULT_LOCALE = "en-US";
 
-export type Entry = {
+export interface Cache {
+  [sysId: string]: Entry;
+}
+
+export interface FieldLocale {
+  sys: {
+    id: string;
+    linkType: string;
+    type: string;
+  };
+}
+
+export interface Field<T = FieldLocale> {
+  [locale: string]: T;
+}
+
+export interface Entry {
   fields: {
-    [id: string]: {
-      [DEFAULT_LOCAL]: {
-        sys: {
-          id: string;
-          linkType: string;
-          type: string;
-        };
-      };
-    };
+    [id: string]: Field<FieldLocale[] | FieldLocale>;
   };
   sys: {
     id: string;
@@ -20,9 +28,10 @@ export type Entry = {
       };
     };
   };
-};
+}
 
 export interface ITree {
   entry: Entry;
   children: ITree[];
+  entryCache: Cache;
 }

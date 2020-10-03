@@ -3,11 +3,11 @@ import { Button } from "@contentful/forma-36-react-components";
 import { SidebarExtensionSDK } from "contentful-ui-extensions-sdk";
 import { DeepCloneDialog } from "../dialogs";
 
-const DEFAULT_LOCAL = "en-US";
+const DEFAULT_LOCALE = "en-US";
 type Entry = {
   fields: {
     [id: string]: {
-      [DEFAULT_LOCAL]: {
+      [DEFAULT_LOCALE]: {
         sys: {
           id: string;
           linkType: string;

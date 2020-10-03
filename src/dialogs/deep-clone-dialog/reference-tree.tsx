@@ -15,7 +15,13 @@ const ReferenceTree: React.FC<{
   return (
     <List className="reference-tree">
       {tree.children.map((child, i) => (
-        <Reference key={i} tree={child} disabled={disabled} />
+        <Reference
+          key={i}
+          tree={child}
+          disabled={disabled}
+          depth={0}
+          index={i}
+        />
       ))}
     </List>
   );

@@ -34,19 +34,26 @@ const DeepCloneDialog: IDialogFC<{
 
   const handleDeepClone = useRecoilCallback(
     ({ snapshot }) => async () => {
-      setIsCloning(true);
-      try {
-        const newEntry = await deepClone(sdk, entryReferenceId, {
-          appendText,
-          snapshot,
-        });
-        sdk.close(newEntry);
-      } catch (e) {
-        setError(e.message);
+      if (referenceTree) {
+        setIsCloning(true);
+        try {
+          const newEntry = await deepClone(
+            sdk,
+            referenceTree.entryCache,
+            entryReferenceId,
+            {
+              appendText,
+              snapshot,
+            }
+          );
+          sdk.close(newEntry);
+        } catch (e) {
+          setError(e.message);
+        }
+        setIsCloning(false);
       }
-      setIsCloning(false);
     },
-    [sdk, appendText, entryReferenceId]
+    [sdk, appendText, entryReferenceId, referenceTree]
   );
 
   React.useEffect(() => {
