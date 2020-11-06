@@ -32,7 +32,7 @@ const Reference: React.FC<{
           onChange={() => setChecked((c) => !c)}
         />
         <Paragraph className="f36-padding-left--xs">
-          {tree.entry.fields?.id?.[DEFAULT_LOCALE]}
+          {tree.entry.fields?.title?.[DEFAULT_LOCALE]}
         </Paragraph>
       </Card>
       {tree.children.length > 0 && (
