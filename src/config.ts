@@ -78,6 +78,24 @@ const config: IConfig = {
         },
       ],
     },
+    {
+      key: 'formsort',
+      label: 'Formsort',
+      description: 'Show a Formsort form in your app',
+      entryFields: [
+        {
+          key: 'formsort',
+          label: 'Formsort',
+          description:
+            'Add Formasort to your app\'s page',
+          type: 'Object',
+          Component: entryFields.Formsort,
+          data: {
+            type: 'formsort',
+          },
+        },
+      ],
+    },
   ],
 };
 
