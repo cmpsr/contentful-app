@@ -12,7 +12,7 @@ describe('Formsort', () => {
     setState = jest.fn();
     (useField as jest.Mock<any>).mockReturnValue([
       {
-        url: '',
+        clientLabel: '',
       },
       setState,
     ]);
@@ -20,14 +20,14 @@ describe('Formsort', () => {
   it('should render Formsort and update', async () => {
     render(<Formsort sdk={sdk as any} config={{} as any} />);
 
-    expect(screen.getByTestId('urlInput')).toBeTruthy();
+    expect(screen.getByTestId('clientLabelInput')).toBeTruthy();
     expect(setState).not.toBeCalled();
 
-    fireEvent.change(screen.getByTestId('urlInput'), {
+    fireEvent.change(screen.getByTestId('clientLabelInput'), {
       target: { value: 'foo' },
     });
     expect(setState).toBeCalledWith({
-      url: 'foo',
+      clientLabel: 'foo',
     });
   });
 });
