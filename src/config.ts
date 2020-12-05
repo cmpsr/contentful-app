@@ -1,10 +1,10 @@
-import * as entryFields from './entry-fields';
+import * as entryFields from "./entry-fields";
 
 export interface IEntryField {
   key: string;
   label: string;
   description: string;
-  type: 'Object' | 'Symbol' | 'Text' | 'Array' | 'Link';
+  type: "Object" | "Symbol" | "Text" | "Array" | "Link";
   Component: React.FC<entryFields.IEntryFieldProps>;
   data?: {
     [key: string]: string | number | boolean;
@@ -25,55 +25,72 @@ export interface IConfig {
 const config: IConfig = {
   enhancedContentTypes: [
     {
-      key: 'hero',
-      label: 'Hero',
-      description: 'Hero content type enables X Y and Z',
+      key: "hero",
+      label: "Hero",
+      description: "Hero content type enables X Y and Z",
       entryFields: [
         {
-          key: 'dropdown',
-          label: 'Dropdown Type',
+          key: "dropdown",
+          label: "Dropdown Type",
           description:
-            'This field will allow you to do all kinds of cool things. Please make sure its of Object type.',
-          type: 'Symbol',
+            "This field will allow you to do all kinds of cool things. Please make sure its of Object type.",
+          type: "Symbol",
           Component: entryFields.DropdownType,
           data: {
-            type: 'hero',
+            type: "hero",
           },
         },
       ],
     },
     {
-      key: 'feature',
-      label: 'Feature',
-      description: 'Feature content type enables X Y and Z',
+      key: "feature",
+      label: "Feature",
+      description: "Feature content type enables X Y and Z",
       entryFields: [
         {
-          key: 'dropdown',
-          label: 'Dropdown Type',
+          key: "dropdown",
+          label: "Dropdown Type",
           description:
-            'This field will allow you to do all kinds of cool things. Please make sure its of Object type.',
-          type: 'Symbol',
+            "This field will allow you to do all kinds of cool things. Please make sure its of Object type.",
+          type: "Symbol",
           Component: entryFields.DropdownType,
           data: {
-            type: 'feature',
+            type: "feature",
           },
         },
       ],
     },
     {
-      key: 'ab',
-      label: 'A/B Testing',
-      description: 'Composer allows for easy ab testing of your components',
+      key: "ab",
+      label: "A/B Testing",
+      description: "Composer allows for easy ab testing of your components",
       entryFields: [
         {
-          key: 'experiment',
-          label: 'Experiment',
+          key: "experiment",
+          label: "Experiment",
           description:
-            'Expermiment section allows you to configure how traffic is allocated to each of the variants',
-          type: 'Object',
+            "Expermiment section allows you to configure how traffic is allocated to each of the variants",
+          type: "Object",
           Component: entryFields.Experiment,
           data: {
-            type: 'ab',
+            type: "ab",
+          },
+        },
+      ],
+    },
+    {
+      key: "gpt",
+      label: "Google Publisher Tag",
+      description: "Embed google ads into your CMS",
+      entryFields: [
+        {
+          key: "gpt",
+          label: "Google Publisher Tag Settings",
+          description: "Add path, layout, and other settings",
+          type: "Object",
+          Component: entryFields.GPT,
+          data: {
+            type: "gpt",
           },
         },
       ],
