@@ -73,7 +73,7 @@ export const deepClone = async (
         }
         ids.push(id);
       }
-    } else if (fieldId === "title") {
+    } else if (fieldId === "title" || (!fields["title"] && fieldId === "id")) {
       field[DEFAULT_LOCALE] = (field[DEFAULT_LOCALE] +
         APPEND_TEXT_SEPARATOR +
         options.appendText) as any;
